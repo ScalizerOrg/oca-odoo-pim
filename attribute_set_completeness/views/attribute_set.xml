@@ -13,7 +13,7 @@
                 <div>
                     <field
                         name="attribute_set_completeness_ids"
-                        context="{'default_attribute_set_id': active_id}"
+                        context="{'default_attribute_set_id': id}"
                         widget="one2many"
                         nolabel="1"
                     />
