@@ -5,7 +5,7 @@
     <record model="ir.ui.view" id="attribute_set_completeness_tree_view">
         <field name="model">attribute.set.completeness</field>
         <field name="arch" type="xml">
-            <tree editable="bottom">
+            <list editable="bottom">
                 <field name="attribute_set_id" invisible="1" />
                 <field name="available_field_ids" invisible="1" />
                 <field name="model_id" />
@@ -21,7 +21,7 @@
                     widget="progressbar"
                     sum="Total"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>
