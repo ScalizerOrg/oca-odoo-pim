@@ -24,7 +24,13 @@ class AttributeSetCompleteness(models.Model):
     field_description = fields.Char(
         related="field_id.field_description",
         string="Field Description",
-        store=True,
+        # [MIG v19]: ir.model.fields.field_description is a translated Char.
+        # A stored related field over a translated column emits a WARNING at
+        # load time because Odoo cannot correctly recompute per-language
+        # values. Since this field is only used as a display label (in views
+        # and _compute_display_name), drop store=True — the small runtime
+        # cost of resolving the related field on read is acceptable and it
+        # silences the warning.
         readonly=True,
     )
     completion_rate = fields.Float()
@@ -41,5 +47,10 @@ class AttributeSetCompleteness(models.Model):
             choosen_field_ids = att_set_complete_ids.mapped("field_id")
             rec.available_field_ids = att_set_field_ids - choosen_field_ids
 
-    def name_get(self):
-        return [(rec.id, rec.field_id.field_description) for rec in self]
+    @api.depends("field_id.field_description")
+    def _compute_display_name(self):
+        # [MIG v19]: name_get() was removed in Odoo 17. Build display_name via
+        # a depends-tracked compute so the label follows the underlying
+        # ir.model.fields description.
+        for rec in self:
+            rec.display_name = rec.field_id.field_description or ""

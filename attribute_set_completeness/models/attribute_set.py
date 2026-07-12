@@ -12,7 +12,7 @@ class AttributeSet(models.Model):
         comodel_name="attribute.set.completeness",
         inverse_name="attribute_set_id",
         string="Completeness Requirements",
-        auto_join=True,
+        # [MIG v19]: auto_join is not a valid parameter on One2many since v17.
     )
 
     @api.constrains("attribute_set_completeness_ids")
